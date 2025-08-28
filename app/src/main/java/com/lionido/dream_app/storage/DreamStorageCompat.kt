@@ -5,15 +5,17 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lionido.dream_app.model.Dream
+import kotlinx.coroutines.*
 
 /**
- * Локальное хранилище снов с использованием SharedPreferences
- * (Room временно отключен из-за проблем совместимости)
+ * Совместимая версия хранилища снов с использованием SharedPreferences
+ * Используется как fallback если Room недоступен
  */
-class DreamStorage(context: Context) {
+class DreamStorageCompat(context: Context) {
 
-    private val prefs: SharedPreferences = context.getSharedPreferences("dreams_storage", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = context.getSharedPreferences("dreams_storage_compat", Context.MODE_PRIVATE)
     private val gson = Gson()
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     companion object {
         private const val DREAMS_KEY = "dreams_list"
@@ -241,19 +243,6 @@ class DreamStorage(context: Context) {
      * Освобождает ресурсы
      */
     fun close() {
-        // Для SharedPreferences нет ресурсов для освобождения
+        scope.cancel()
     }
 }
-
-/**
- * Статистика снов
- */
-data class DreamStatistics(
-    val totalDreams: Int,
-    val averageDreamsPerWeek: Double,
-    val mostCommonEmotions: List<Pair<String, Int>>,
-    val mostCommonSymbols: List<Pair<String, Int>>,
-    val mostCommonTags: List<Pair<String, Int>>,
-    val moodDistribution: Map<com.lionido.dream_app.model.DreamMood, Int>,
-    val lucidDreamsCount: Int
-)

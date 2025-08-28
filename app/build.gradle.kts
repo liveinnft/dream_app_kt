@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt")
+    // Временно отключено из-за проблем с KAPT/KSP
+    // id("com.google.devtools.ksp") version "1.9.20-1.0.14"
 }
 
 android {
@@ -39,6 +40,11 @@ android {
     }
 }
 
+// Конфигурация для KSP (временно отключено)
+// android.sourceSets.configureEach {
+//     kotlin.srcDir("$layout.buildDirectory/generated/ksp/$name/kotlin/")
+// }
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -58,10 +64,10 @@ dependencies {
     // Для анимаций
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // Для работы с базой данных Room (локальное хранение)
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    // Для работы с базой данных Room (временно отключено)
+    // implementation("androidx.room:room-runtime:2.6.1")
+    // implementation("androidx.room:room-ktx:2.6.1")
+    // ksp("androidx.room:room-compiler:2.6.1")
 
     // Для работы с корутинами
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

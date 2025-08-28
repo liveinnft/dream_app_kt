@@ -31,6 +31,7 @@ import java.io.IOException
 import java.util.*
 
 import com.lionido.dream_app.analyzer.DreamAnalyzer
+import com.lionido.dream_app.analyzer.DreamApiAnalyzer
 import com.lionido.dream_app.storage.DreamStorage
 import com.lionido.dream_app.model.Dream
 
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private val recordPermissionCode = 101
     private val dreamAnalyzer = DreamAnalyzer()
+    private lateinit var dreamApiAnalyzer: DreamApiAnalyzer
     private lateinit var dreamStorage: DreamStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         dreamStorage = DreamStorage(this)
+        dreamApiAnalyzer = DreamApiAnalyzer(this)
 
         initViews()
         setupFloatingAnimation()
@@ -268,10 +271,20 @@ class MainActivity : AppCompatActivity() {
                     lucidDream = analysis.dreamType.name == "LUCID"
                 )
 
-                // Возвращаемся в главный поток для обновления UI
-                runOnUiThread {
-                    showDreamAnalysis(dream, analysis)
-                    recordStatus.text = getString(R.string.tap_to_start_recording)
+                // Получаем расширенную интерпретацию через API
+                dreamApiAnalyzer.interpretDream(dreamText) { apiInterpretation ->
+                    runOnUiThread {
+                        val finalDream = dream.copy(
+                            interpretation = if (apiInterpretation != null) {
+                                "${dream.interpretation}\n\n--- Расширенная интерпретация ---\n$apiInterpretation"
+                            } else {
+                                dream.interpretation
+                            }
+                        )
+
+                        showDreamAnalysis(finalDream, analysis)
+                        recordStatus.text = getString(R.string.tap_to_start_recording)
+                    }
                 }
 
             } catch (e: Exception) {
@@ -299,7 +312,7 @@ class MainActivity : AppCompatActivity() {
         // Сохраняем сон во временное хранилище для передачи в следующую активность
         val tempDream = dream.copy(
             symbols = analysis.symbols,
-            interpretation = analysis.interpretation
+            interpretation = dream.interpretation
         )
 
         // Сохраняем сон в локальное хранилище

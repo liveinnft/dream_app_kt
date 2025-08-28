@@ -4,11 +4,16 @@
 
     <!-- Разрешения для записи аудио -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <!-- Для распознавания речи -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Уведомление что приложение использует микрофон -->
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -19,24 +24,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dream_app"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
+
+        <!-- Главная активность -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Dream_app">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Активность анализа сна -->
         <activity
             android:name=".DreamAnalysisActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".DreamsListActivity" />
-        <activity android:name=".DreamStatisticsActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Dream_app" />
+
+        <!-- Активность списка снов -->
+        <activity
+            android:name=".DreamsListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Dream_app" />
+
+        <!-- Активность статистики -->
+        <activity
+            android:name=".DreamStatisticsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Dream_app" />
     </application>
 
 </manifest>

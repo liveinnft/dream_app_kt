@@ -19,3 +19,37 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Gson rules
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# Keep our model classes for Gson serialization
+-keep class com.lionido.dream_app.model.** { *; }
+-keep class com.lionido.dream_app.storage.** { *; }
+
+# OkHttp rules
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Speech recognition
+-keep class android.speech.** { *; }
+
+# Material Design Components
+-keep class com.google.android.material.** { *; }
+-dontwarn com.google.android.material.**
+
+# Keep our analyzer classes
+-keep class com.lionido.dream_app.analyzer.** { *; }
+
+# AndroidX
+-keep class androidx.** { *; }
+-dontwarn androidx.**

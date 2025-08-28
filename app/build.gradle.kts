@@ -45,7 +45,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-
+    // CardView для красивых карточек
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // Для работы с RecyclerView и фрагментами
     implementation("androidx.recyclerview:recyclerview:1.3.2")
@@ -56,7 +57,7 @@ dependencies {
     // Для анимаций
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // Для работы с базой данных Room (локальное хранение)
+    // Для работы с базой данных Room (локальное хранение) - опционально
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
@@ -65,7 +66,9 @@ dependencies {
 
     // Для работы с JSON
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    // Для HTTP запросов (OpenRouter API)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

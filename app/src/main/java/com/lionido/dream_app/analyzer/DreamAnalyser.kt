@@ -3,6 +3,14 @@ package com.lionido.dream_app.analyzer
 import com.lionido.dream_app.model.*
 import java.util.*
 
+import kotlin.text.Regex
+import kotlin.text.lowercase
+import kotlin.collections.mutableListOf
+import kotlin.collections.listOf
+import kotlin.collections.mutableSetOf
+import kotlin.collections.groupBy
+import kotlin.collections.count
+
 /**
  * Анализатор снов - основной класс для интерпретации сновидений
  */
@@ -133,7 +141,7 @@ class DreamAnalyzer {
         if (symbols.isNotEmpty()) {
             interpretation.append("Ключевые символы в вашем сне:\n\n")
             symbols.take(5).forEach { symbol ->
-                interpretation.append("• ${symbol.name.capitalize()}: ${symbol.meaning}")
+                interpretation.append("• ${symbol.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}: ${symbol.meaning}")
                 if (symbol.frequency > 1) {
                     interpretation.append(" (встречается ${symbol.frequency} раз)")
                 }
@@ -219,7 +227,7 @@ class DreamAnalyzer {
             .entries
             .sortedByDescending { it.value.size }
             .take(3)
-            .map { it.key.name.lowercase().capitalize() }
+            .map { it.key.name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } }
     }
 }
 
@@ -235,3 +243,8 @@ data class DreamAnalysis(
     val tags: List<String>,
     val keyThemes: List<String>
 )
+
+/**
+ * ML-анализатор для будущего расширения
+ */
+// Класс DreamMLAnalyzer удалён во избежание дублирования

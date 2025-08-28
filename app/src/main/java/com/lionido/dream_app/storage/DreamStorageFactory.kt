@@ -8,18 +8,11 @@ import android.content.Context
 object DreamStorageFactory {
     
     /**
-     * Создает экземпляр хранилища, выбирая между Room и SharedPreferences
-     * в зависимости от доступности Room
+     * Создает экземпляр хранилища
+     * Сейчас использует SharedPreferences (Room временно отключен)
      */
     fun createStorage(context: Context): IDreamStorage {
-        return try {
-            // Пытаемся создать Room хранилище
-            DreamStorage(context)
-        } catch (e: Exception) {
-            // Если Room недоступен, используем SharedPreferences
-            e.printStackTrace()
-            DreamStorageAdapter(DreamStorageCompat(context))
-        }
+        return DreamStorageAdapter(DreamStorage(context))
     }
 }
 

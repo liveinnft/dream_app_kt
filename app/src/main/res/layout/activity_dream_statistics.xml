@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_title_statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/statistics"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:id="@+id/text_total_dreams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Всего снов: ..." />
+
+        <!-- Здесь блоки для других численных и текстовых данных -->
+        <TextView
+            android:id="@+id/text_most_common_emotions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Частые эмоции: ..."
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/text_most_common_symbols"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Частые символы: ..."
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/text_lucid_dreams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Осознанных снов: ..."
+            android:paddingTop="8dp" />
+        <!-- Можно добавить еще PieChart и другие View для графиков -->
+
+    </LinearLayout>
+</ScrollView>

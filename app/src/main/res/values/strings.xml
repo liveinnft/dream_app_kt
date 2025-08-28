@@ -1,3 +1,31 @@
 <resources>
-    <string name="app_name">dream_app</string>
+    <string name="app_name">Сонный Переводчик</string>
+    <string name="dream_interpreter">Сонный Переводчик</string>
+    <string name="tell_your_dream">Расскажите о своём сне</string>
+    <string name="record_dream">Записать сон</string>
+    <string name="tap_to_start_recording">Нажмите, чтобы начать запись</string>
+    <string name="recording">Идёт запись...</string>
+    <string name="processing">Обрабатываем ваш сон...</string>
+    <string name="my_dreams">Мои сны</string>
+    <string name="statistics">Статистика</string>
+    <string name="permission_required">Нужно разрешение на запись аудио</string>
+    <string name="permission_denied">Без разрешения записи невозможна работа приложения</string>
+    <string name="stop_recording">Остановить запись</string>
+    <string name="analyze_dream">Анализировать сон</string>
+
+    <!-- Анализ сна -->
+    <string name="dream_analysis">Анализ сна</string>
+    <string name="dream_saved">Сон сохранен!</string>
+    <string name="analysis_complete">Анализ завершен!</string>
+    <string name="back">Назад</string>
+    <string name="save">Сохранить</string>
+    <string name="dream_description">Описание сна</string>
+    <string name="emotions">Эмоции</string>
+    <string name="key_themes">Ключевые темы</string>
+    <string name="symbols_in_dream">Символы в сне</string>
+    <string name="interpretation">Интерпретация</string>
+    <string name="mood">Настроение</string>
+    <string name="type">Тип</string>
+    <string name="no_emotions">Нет эмоций</string>
+    <string name="no_themes">Нет ключевых тем</string>
 </resources>

@@ -2,4 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Основные цвета приложения -->
+    <color name="primary_color">#667eea</color>
+    <color name="secondary_color">#764ba2</color>
+    <color name="accent_color">#f093fb</color>
+
+    <!-- Цвета кнопки записи -->
+    <color name="record_button_color">#FF6B6B</color>
+    <color name="record_button_pressed">#FF5252</color>
+
+    <!-- Цвета текста -->
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B3FFFFFF</color>
+    <color name="dark_text">#333333</color>
+
+    <!-- Цвета фона -->
+    <color name="background_light">#F8F9FA</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="surface_color">#F5F5F5</color>
 </resources>

@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Инициализируем тему перед setContentView
+        ThemeManager.initTheme(this)
+        
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
@@ -127,6 +131,11 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btn_statistics).setOnClickListener {
             val intent = Intent(this, DreamStatisticsActivity::class.java)
+            startActivity(intent)
+        }
+
+        findViewById<View>(R.id.btn_settings).setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

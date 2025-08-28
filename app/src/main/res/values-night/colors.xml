@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Основные цвета приложения (темная тема) -->
+    <color name="primary_color">#8b9df7</color>
+    <color name="secondary_color">#9c7fc1</color>
+    <color name="accent_color">#f5a6fb</color>
+
+    <!-- Цвета кнопки записи (темная тема) -->
+    <color name="record_button_color">#FF8A80</color>
+    <color name="record_button_pressed">#FF7043</color>
+
+    <!-- Цвета текста (темная тема) -->
+    <color name="primary_text">#E1E1E1</color>
+    <color name="secondary_text">#B3B3B3</color>
+    <color name="dark_text">#E1E1E1</color>
+
+    <!-- Цвета фона (темная тема) -->
+    <color name="background_light">#121212</color>
+    <color name="card_background">#1E1E1E</color>
+    <color name="surface_color">#2C2C2C</color>
+</resources>

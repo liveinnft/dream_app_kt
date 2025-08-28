@@ -4,6 +4,7 @@ import android.content.Context
 import com.lionido.dream_app.R
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
 
@@ -31,10 +32,7 @@ class DreamApiAnalyzer(private val context: Context) {
             put("messages", listOf(mapOf("role" to "user", "content" to prompt)))
         }
 
-        val requestBody = RequestBody.create(
-            "application/json".toMediaType(),
-            bodyJson.toString()
-        )
+        val requestBody = bodyJson.toString().toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
             .url(url)

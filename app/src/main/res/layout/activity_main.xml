@@ -8,6 +8,20 @@
     android:background="@drawable/gradient_background"
     tools:context=".MainActivity">
 
+    <!-- Кнопка настроек -->
+    <ImageButton
+        android:id="@+id/btn_settings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_settings_24"
+        android:contentDescription="Настройки"
+        app:tint="@color/primary_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Заголовок приложения -->
     <TextView
         android:id="@+id/app_title"

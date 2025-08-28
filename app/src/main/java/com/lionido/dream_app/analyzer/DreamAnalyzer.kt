@@ -240,7 +240,7 @@ data class DreamAnalysis(
  * ML-анализатор для будущего расширения
  */
 class DreamMLAnalyzer {
-    fun interpretDream(dreamText: String): String {
+    fun interpretDream(@Suppress("UNUSED_PARAMETER") dreamText: String): String {
         // TODO: Здесь можно интегрировать ML-модель (TFLite, Cloud API и др.)
         return "[ML-интерпретация сна будет доступна в будущем]"
     }

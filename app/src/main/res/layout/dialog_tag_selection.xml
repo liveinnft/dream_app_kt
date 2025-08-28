@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Секция предложенных тегов -->
+        <TextView
+            android:id="@+id/suggestedLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Предложенные теги:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="?colorPrimary"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif-medium" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/suggestedChipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:chipSpacing="8dp"
+            app:lineSpacing="4dp" />
+
+        <!-- Разделитель -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Заголовок всех тегов -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Все теги:"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="?colorPrimary"
+                android:fontFamily="sans-serif-medium" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addTagButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Добавить"
+                android:textSize="12sp"
+                style="@style/Widget.Material3.Button.TextButton"
+                app:icon="@drawable/ic_add_24"
+                app:iconSize="16dp" />
+
+        </LinearLayout>
+
+        <!-- Группа всех тегов -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacing="8dp"
+            app:lineSpacing="4dp"
+            app:selectionRequired="false"
+            app:singleSelection="false" />
+
+        <!-- Подсказка -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Выберите теги, которые подходят к вашему сну. Вы можете создать новые теги, нажав кнопку &quot;Добавить&quot;."
+            android:textSize="12sp"
+            android:textColor="?android:textColorSecondary"
+            android:layout_marginTop="16dp"
+            android:lineSpacingExtra="2dp" />
+
+    </LinearLayout>
+
+</ScrollView>

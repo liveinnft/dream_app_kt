@@ -30,6 +30,7 @@ class DreamAnalysisActivity : AppCompatActivity() {
     private lateinit var dreamInterpretationText: TextView
     private lateinit var emotionsChipGroup: ChipGroup
     private lateinit var themesChipGroup: ChipGroup
+    private lateinit var tagsChipGroup: ChipGroup
     private lateinit var symbolsRecycler: RecyclerView
 
     private lateinit var symbolsAdapter: DreamSymbolAdapter
@@ -60,6 +61,7 @@ class DreamAnalysisActivity : AppCompatActivity() {
         dreamInterpretationText = findViewById(R.id.dream_interpretation)
         emotionsChipGroup = findViewById(R.id.emotions_chip_group)
         themesChipGroup = findViewById(R.id.themes_chip_group)
+        tagsChipGroup = findViewById(R.id.tags_chip_group)
         symbolsRecycler = findViewById(R.id.symbols_recycler)
     }
 
@@ -86,6 +88,10 @@ class DreamAnalysisActivity : AppCompatActivity() {
                     Toast.makeText(this, "Ошибка при сохранении", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        findViewById<View>(R.id.btn_edit_tags).setOnClickListener {
+            showTagSelectionDialog()
         }
     }
 
@@ -174,6 +180,9 @@ class DreamAnalysisActivity : AppCompatActivity() {
 
         // Ключевые темы
         displayKeyThemes(analysis.keyThemes)
+
+        // Пользовательские теги
+        displayTags(dream.tags)
 
         // Символы
         symbolsAdapter.updateSymbols(dream.symbols)
@@ -312,5 +321,50 @@ class DreamAnalysisActivity : AppCompatActivity() {
             tags = listOf("полет", "город", "свобода", "птица"),
             keyThemes = listOf("Свобода", "Духовность", "Достижения")
         )
+    }
+
+    private fun displayTags(tags: List<String>) {
+        tagsChipGroup.removeAllViews()
+
+        if (tags.isEmpty()) {
+            val emptyChip = Chip(this)
+            emptyChip.text = "Теги не добавлены"
+            emptyChip.isEnabled = false
+            emptyChip.setTextColor(getColor(android.R.color.darker_gray))
+            tagsChipGroup.addView(emptyChip)
+            return
+        }
+
+        tags.forEach { tag ->
+            val chip = Chip(this)
+            chip.text = tag
+            chip.isClickable = false
+            chip.chipBackgroundColor = android.content.res.ColorStateList.valueOf(
+                android.graphics.Color.parseColor(TagManager.getTagColor(this, tag))
+            )
+            chip.setTextColor(android.graphics.Color.WHITE)
+            tagsChipGroup.addView(chip)
+        }
+    }
+
+    private fun showTagSelectionDialog() {
+        val currentDream = currentDream ?: return
+        
+        val dialog = TagSelectionDialog.newInstance(
+            currentTags = currentDream.tags,
+            dreamContent = currentDream.content,
+            listener = object : TagSelectionDialog.TagSelectionListener {
+                override fun onTagsSelected(selectedTags: List<String>) {
+                    updateDreamTags(selectedTags)
+                }
+            }
+        )
+        
+        dialog.show(supportFragmentManager, "TagSelectionDialog")
+    }
+
+    private fun updateDreamTags(newTags: List<String>) {
+        currentDream = currentDream?.copy(tags = newTags)
+        displayTags(newTags)
     }
 }

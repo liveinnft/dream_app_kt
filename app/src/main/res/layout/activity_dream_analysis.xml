@@ -206,6 +206,40 @@
                     android:id="@+id/themes_chip_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:singleLine="false" />
+
+                <!-- Пользовательские теги -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Теги"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/dark_text" />
+
+                    <ImageButton
+                        android:id="@+id/btn_edit_tags"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_edit_24"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Редактировать теги" />
+
+                </LinearLayout>
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tags_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:singleLine="false" />
 
             </LinearLayout>

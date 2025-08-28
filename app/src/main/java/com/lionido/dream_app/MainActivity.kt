@@ -370,7 +370,36 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         floatingAnimator.cancel()
         stopPulseAnimation()
-        speechRecognizer?.destroy()
-        mediaRecorder?.release()
+        
+        // Properly clean up speech recognizer
+        speechRecognizer?.apply {
+            stopListening()
+            destroy()
+        }
+        speechRecognizer = null
+        
+        // Properly clean up media recorder
+        mediaRecorder?.apply {
+            try {
+                if (isRecording) {
+                    stop()
+                }
+                release()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        mediaRecorder = null
+        
+        // Close dream storage
+        dreamStorage.close()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Stop recording when app goes to background to prevent resource leaks
+        if (isRecording) {
+            stopRecording()
+        }
     }
 }

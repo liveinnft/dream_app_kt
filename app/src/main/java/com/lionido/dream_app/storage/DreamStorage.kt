@@ -1,39 +1,26 @@
 package com.lionido.dream_app.storage
 
 import android.content.Context
-import android.content.SharedPreferences
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.lionido.dream_app.model.Dream
+import kotlinx.coroutines.*
 
 /**
- * Локальное хранилище снов с использованием SharedPreferences
+ * Локальное хранилище снов с использованием Room Database
  */
 class DreamStorage(context: Context) {
 
-    private val prefs: SharedPreferences = context.getSharedPreferences("dreams_storage", Context.MODE_PRIVATE)
-    private val gson = Gson()
-
-    companion object {
-        private const val DREAMS_KEY = "dreams_list"
-        private const val DREAMS_COUNT_KEY = "dreams_count"
-    }
+    private val database = DreamDatabase.getDatabase(context)
+    private val dreamDao = database.dreamDao()
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     /**
      * Сохраняет сон в локальное хранилище
      */
     fun saveDream(dream: Dream): Boolean {
         return try {
-            val dreams = getAllDreams().toMutableList()
-            dreams.add(0, dream) // Добавляем в начало списка (новые сверху)
-
-            val dreamsJson = gson.toJson(dreams)
-
-            prefs.edit()
-                .putString(DREAMS_KEY, dreamsJson)
-                .putInt(DREAMS_COUNT_KEY, dreams.size)
-                .apply()
-
+            runBlocking {
+                dreamDao.insertDream(DreamEntity.fromDream(dream))
+            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -46,12 +33,8 @@ class DreamStorage(context: Context) {
      */
     fun getAllDreams(): List<Dream> {
         return try {
-            val dreamsJson = prefs.getString(DREAMS_KEY, null)
-            if (dreamsJson != null) {
-                val type = object : TypeToken<List<Dream>>() {}.type
-                gson.fromJson(dreamsJson, type)
-            } else {
-                emptyList()
+            runBlocking {
+                dreamDao.getAllDreamsSync().map { it.toDream() }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -63,7 +46,14 @@ class DreamStorage(context: Context) {
      * Получает сон по ID
      */
     fun getDreamById(dreamId: String): Dream? {
-        return getAllDreams().find { it.id == dreamId }
+        return try {
+            runBlocking {
+                dreamDao.getDreamById(dreamId)?.toDream()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     /**
@@ -71,19 +61,8 @@ class DreamStorage(context: Context) {
      */
     fun updateDream(updatedDream: Dream): Boolean {
         return try {
-            val dreams = getAllDreams().toMutableList()
-            val index = dreams.indexOfFirst { it.id == updatedDream.id }
-
-            if (index != -1) {
-                dreams[index] = updatedDream
-                val dreamsJson = gson.toJson(dreams)
-
-                prefs.edit()
-                    .putString(DREAMS_KEY, dreamsJson)
-                    .apply()
-                true
-            } else {
-                false
+            runBlocking {
+                dreamDao.updateDream(DreamEntity.fromDream(updatedDream)) > 0
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -96,19 +75,9 @@ class DreamStorage(context: Context) {
      */
     fun deleteDream(dreamId: String): Boolean {
         return try {
-            val dreams = getAllDreams().toMutableList()
-            val removed = dreams.removeIf { it.id == dreamId }
-
-            if (removed) {
-                val dreamsJson = gson.toJson(dreams)
-
-                prefs.edit()
-                    .putString(DREAMS_KEY, dreamsJson)
-                    .putInt(DREAMS_COUNT_KEY, dreams.size)
-                    .apply()
+            runBlocking {
+                dreamDao.deleteDreamById(dreamId) > 0
             }
-
-            removed
         } catch (e: Exception) {
             e.printStackTrace()
             false
@@ -119,14 +88,28 @@ class DreamStorage(context: Context) {
      * Получает количество сохраненных снов
      */
     fun getDreamsCount(): Int {
-        return prefs.getInt(DREAMS_COUNT_KEY, 0)
+        return try {
+            runBlocking {
+                dreamDao.getDreamsCount()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
     }
 
     /**
      * Получает последние N снов
      */
     fun getRecentDreams(limit: Int = 10): List<Dream> {
-        return getAllDreams().take(limit)
+        return try {
+            runBlocking {
+                dreamDao.getRecentDreams(limit).map { it.toDream() }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
     }
 
     /**
@@ -136,12 +119,13 @@ class DreamStorage(context: Context) {
         val searchQuery = query.lowercase().trim()
         if (searchQuery.isEmpty()) return emptyList()
 
-        return getAllDreams().filter { dream ->
-            dream.title.lowercase().contains(searchQuery) ||
-                    dream.content.lowercase().contains(searchQuery) ||
-                    dream.interpretation.lowercase().contains(searchQuery) ||
-                    dream.tags.any { it.lowercase().contains(searchQuery) } ||
-                    dream.emotions.any { it.lowercase().contains(searchQuery) }
+        return try {
+            runBlocking {
+                dreamDao.searchDreams(searchQuery).map { it.toDream() }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
         }
     }
 
@@ -149,9 +133,13 @@ class DreamStorage(context: Context) {
      * Получает сны за определенный период
      */
     fun getDreamsByDateRange(startDate: Long, endDate: Long): List<Dream> {
-        return getAllDreams().filter { dream ->
-            val dreamTime = dream.dateCreated.time
-            dreamTime >= startDate && dreamTime <= endDate
+        return try {
+            runBlocking {
+                dreamDao.getDreamsByDateRange(startDate, endDate).map { it.toDream() }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
         }
     }
 
@@ -186,6 +174,15 @@ class DreamStorage(context: Context) {
             .groupBy { it.mood }
             .mapValues { it.value.size }
 
+        val lucidDreamsCount = try {
+            runBlocking {
+                dreamDao.getLucidDreamsCount()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            allDreams.count { it.lucidDream }
+        }
+
         return DreamStatistics(
             totalDreams = allDreams.size,
             averageDreamsPerWeek = calculateAverageDreamsPerWeek(allDreams),
@@ -193,7 +190,7 @@ class DreamStorage(context: Context) {
             mostCommonSymbols = symbolFrequency.take(5),
             mostCommonTags = tagFrequency.take(5),
             moodDistribution = moodDistribution,
-            lucidDreamsCount = allDreams.count { it.lucidDream }
+            lucidDreamsCount = lucidDreamsCount
         )
     }
 
@@ -212,10 +209,20 @@ class DreamStorage(context: Context) {
      * Очищает все данные
      */
     fun clearAllData() {
-        prefs.edit()
-            .remove(DREAMS_KEY)
-            .remove(DREAMS_COUNT_KEY)
-            .apply()
+        try {
+            runBlocking {
+                dreamDao.clearAllDreams()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Освобождает ресурсы
+     */
+    fun close() {
+        scope.cancel()
     }
 }
 

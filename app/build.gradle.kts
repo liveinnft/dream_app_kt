@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -57,9 +58,10 @@ dependencies {
     // Для анимаций
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // Для работы с базой данных Room (локальное хранение) - опционально
+    // Для работы с базой данных Room (локальное хранение)
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
     // Для работы с корутинами
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

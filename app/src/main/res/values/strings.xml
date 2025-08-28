@@ -28,4 +28,8 @@
     <string name="type">Тип</string>
     <string name="no_emotions">Нет эмоций</string>
     <string name="no_themes">Нет ключевых тем</string>
+    
+    <!-- API Configuration -->
+    <string name="api_key_not_configured">API ключ не настроен</string>
+    <string name="api_analysis_unavailable">Расширенный анализ недоступен</string>
 </resources>

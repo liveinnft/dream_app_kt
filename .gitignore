@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Security - API Keys
+app/src/main/res/values/openrouter_api_key.xml
+
+# Temporary files
+app/ff

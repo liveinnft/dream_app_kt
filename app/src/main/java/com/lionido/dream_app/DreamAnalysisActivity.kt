@@ -189,7 +189,7 @@ class DreamAnalysisActivity : AppCompatActivity() {
 
         emotions.forEach { emotion ->
             val chip = Chip(this).apply {
-                text = emotion.capitalize()
+                text = emotion.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 isClickable = false
                 setChipBackgroundColorResource(R.color.accent_color)
                 setTextColor(resources.getColor(R.color.white, this@DreamAnalysisActivity.theme))

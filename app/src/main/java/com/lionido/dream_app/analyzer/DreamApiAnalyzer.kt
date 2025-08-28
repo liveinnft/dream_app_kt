@@ -14,6 +14,12 @@ class DreamApiAnalyzer(private val context: Context) {
     }
 
     fun interpretDream(dreamText: String, callback: (String?) -> Unit) {
+        // Check if API key is properly configured
+        if (apiKey.isBlank() || apiKey == "YOUR_API_KEY_HERE") {
+            callback(null)
+            return
+        }
+
         val url = "https://openrouter.ai/api/v1/chat/completions"
         val prompt = """
             Поясни сон как психолог и мифолог, анализируй ключевые образы:
@@ -39,22 +45,31 @@ class DreamApiAnalyzer(private val context: Context) {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
                 callback(null)
             }
+            
             override fun onResponse(call: Call, response: Response) {
-                val result = response.body?.string()
-                val text = try {
-                    val json = JSONObject(result ?: "")
-                    val choices = json.optJSONArray("choices")
-                    if (choices != null && choices.length() > 0) {
-                        choices.getJSONObject(0).getJSONObject("message").getString("content")
-                    } else {
+                response.use { resp ->
+                    val result = resp.body?.string()
+                    val text = try {
+                        if (!resp.isSuccessful) {
+                            null
+                        } else {
+                            val json = JSONObject(result ?: "")
+                            val choices = json.optJSONArray("choices")
+                            if (choices != null && choices.length() > 0) {
+                                choices.getJSONObject(0).getJSONObject("message").getString("content")
+                            } else {
+                                null
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                         null
                     }
-                } catch (e: Exception) {
-                    null
+                    callback(text)
                 }
-                callback(text)
             }
         })
     }
